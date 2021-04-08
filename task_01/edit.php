@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <!DOCTYPE html>
 <html lang="ja">
 
-<?php include __DIR__ . "/_head.php"; ?>
+<?php include_once __DIR__ . '/_head.html' ?>
 
 <body>
     <div class="wrapper">

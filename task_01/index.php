@@ -6,10 +6,10 @@ require_once __DIR__ . '/functions.php';
 /* タスク照会
 ---------------------------------------------*/
 // 未完了タスクの取得
-$notyet_tasks = findNotyetTaskByStatus();
+$notyet_tasks = findTaskByStatus(TASK_STATUS_NOTYET);
 
 // 完了タスクの取得
-$done_tasks = findDoneTaskByStatus();
+$done_tasks = findTaskByStatus(TASK_STATUS_DONE);
 
 /* タスク登録
 ---------------------------------------------*/
@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <!DOCTYPE html>
 <html lang="ja">
 
-<?php include __DIR__ . "/_head.php"; ?>
+<?php include_once __DIR__ . '/_head.html' ?>
 
 <body>
     <div class="wrapper">

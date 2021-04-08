@@ -27,53 +27,35 @@ function h($str)
     return htmlspecialchars($str, ENT_QUOTES, "UTF-8");
 }
 
-// 未完了タスクのレコードを取得
-function findNotyetTaskByStatus()
+// status に応じてレコードを取得
+function findTaskByStatus($status)
 {
     // データベースに接続
     $dbh = connectDb();
 
-    // status が notyet のデータを取得
-    $sql = "SELECT * FROM tasks WHERE status = 'notyet'";
+    // status で該当レコードを取得
+    $sql = 'SELECT * FROM tasks WHERE status = :status';
 
     // プリペアドステートメントの準備
     $stmt = $dbh->prepare($sql);
 
-    // プリペアドステートメントの実行
-    $stmt->execute();
-
-    // 結果の受け取り
-    $notyet_tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    return $notyet_tasks;
-}
-
-// 完了タスクのレコードを取得
-function findDoneTaskByStatus()
-{
-    // データベースに接続
-    $dbh = connectDb();
-
-    // status が done のデータを取得
-    $sql2 = "SELECT * FROM tasks WHERE status = 'done'";
-
-    // プリペアドステートメントの準備
-    $stmt = $dbh->prepare($sql2);
+    // パラメータのバインド
+    $stmt->bindParam(':status', $status, PDO::PARAM_STR);
 
     // プリペアドステートメントの実行
     $stmt->execute();
 
     // 結果の受け取り
-    $done_tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    return $done_tasks;
+    return $tasks;
 }
 
 // タスク登録時のバリデーション
 function insertValidate($title)
 {
-    // 初期化
-    $errors = []; // エラーチェック用の配列
+    // エラーチェック用の配列を初期化
+    $errors = [];
 
     if ($title == '') {
         $errors[] = MSG_TITLE_REQUIRED;

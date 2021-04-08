@@ -8,3 +8,7 @@ define('PASSWORD', '9999');
 // エラーメッセージを定数として定義
 define('MSG_TITLE_REQUIRED', 'タスク名を入力してください');
 define('MSG_TITLE_NO_CHANGE', 'タスク名が変更されていません');
+
+// ステータスを定数として定義
+define('TASK_STATUS_NOTYET', 'notyet');
+define('TASK_STATUS_DONE', 'done');
