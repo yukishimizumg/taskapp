@@ -8,3 +8,7 @@ $id = filter_input(INPUT_GET, 'id');
 
 // タスク削除処理の実行
 deleteTask($id);
+
+// index.php にリダイレクト
+header('Location: index.php');
+exit;

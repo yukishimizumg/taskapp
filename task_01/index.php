@@ -28,6 +28,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($errors)) {
         // タスク登録処理の実行
         insertTask($title);
+
+        // index.php にリダイレクト
+        header('Location: index.php');
+        exit;
     }
 }
 ?>

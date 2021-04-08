@@ -87,10 +87,6 @@ function insertTask($title)
     
     // プリペアドステートメントの実行
     $stmt->execute();
-    
-    // index.php にリダイレクト
-    header('Location: index.php');
-    exit;
 }
 
 // タスク完了
@@ -117,10 +113,6 @@ function updateStatusToDone($id)
 
     // プリペアドステートメントの実行
     $stmt->execute();
-
-    // index.php にリダイレクト
-    header('Location: index.php');
-    exit;
 }
 
 // 受け取った id のレコードを取得
@@ -192,10 +184,6 @@ function updateTask($id, $title)
 
     // プリペアドステートメントの実行
     $stmt->execute();
-    
-    // index.php にリダイレクト
-    header('Location: index.php');
-    exit;
 }
 
 // エラーメッセージ作成
@@ -234,8 +222,4 @@ function deleteTask($id)
 
     // プリペアドステートメントの実行
     $stmt->execute();
-
-    // index.php にリダイレクト
-    header('Location: index.php');
-    exit;
 }

@@ -27,6 +27,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($errors)) {
         // タスク更新処理の実行
         updateTask($id, $title);
+
+        // index.php にリダイレクト
+        header('Location: index.php');
+        exit;
     }
 }
 ?>
