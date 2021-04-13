@@ -13,10 +13,10 @@ $task = findById($id);
 ---------------------------------------------*/
 // 初期化
 $title = '';
+$errors = [];
 
 // リクエストメソッドの判定
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
     // フォームに入力されたデータを受け取る
     $title = filter_input(INPUT_POST, 'title');
 
@@ -43,8 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="wrapper">
         <h2>タスク更新</h2>
         <!-- エラーが発生した場合、エラーメッセージを出力 -->
-        <?php if ($errors) echo (createErrMsg($errors)); ?>
-
+        <?php if ($errors) echo (createErrMsg($errors)) ?>
         <form action="" method="post">
             <input type="text" name="title" value="<?= h($task['title']) ?>">
             <input type="submit" value="更新" class="btn submit-btn">

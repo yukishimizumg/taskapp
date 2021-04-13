@@ -3,18 +3,14 @@
 // 関数ファイルを読み込む
 require_once __DIR__ . '/functions.php';
 
-/* タスク照会
----------------------------------------------*/
-// 未完了タスクの取得
-$notyet_tasks = findTaskByStatus(TASK_STATUS_NOTYET);
-
-// 完了タスクの取得
-$done_tasks = findTaskByStatus(TASK_STATUS_DONE);
+// 定数を参照するため設定ファイルを読み込む
+require_once __DIR__ . '/config.php';
 
 /* タスク登録
 ---------------------------------------------*/
 // 初期化
 $title = '';
+$errors = [];
 
 // リクエストメソッドの判定
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -28,12 +24,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($errors)) {
         // タスク登録処理の実行
         insertTask($title);
-
-        // index.php にリダイレクト
-        header('Location: index.php');
-        exit;
     }
 }
+
+/* タスク照会
+---------------------------------------------*/
+// 未完了タスクの取得
+$notyet_tasks = findTaskByStatus(TASK_STATUS_NOTYET);
+
+// 完了タスクの取得
+$done_tasks = findTaskByStatus(TASK_STATUS_DONE);
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -45,8 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="new-task">
             <h1>My Tasks</h1>
             <!-- エラーが発生した場合、エラーメッセージを出力 -->
-            <?php if ($errors) echo (createErrMsg($errors)); ?>
-
+            <?php if ($errors) echo (createErrMsg($errors)) ?>
             <form action="" method="post">
                 <input type="text" name="title" placeholder="タスクを入力してください">
                 <input type="submit" value="登録" class="btn submit-btn">

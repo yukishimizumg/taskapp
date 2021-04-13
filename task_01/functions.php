@@ -3,7 +3,7 @@
 // 設定ファイルを読み込む
 require_once __DIR__ . '/config.php';
 
-// データベース接続
+// 接続処理を行う関数
 function connectDb()
 {
     try {
@@ -20,41 +20,17 @@ function connectDb()
     }
 }
 
-// エスケープ処理
+// エスケープ処理を行う関数
 function h($str)
 {
     // ENT_QUOTES: シングルクオートとダブルクオートを共に変換する。
-    return htmlspecialchars($str, ENT_QUOTES, "UTF-8");
-}
-
-// status に応じてレコードを取得
-function findTaskByStatus($status)
-{
-    // データベースに接続
-    $dbh = connectDb();
-
-    // status で該当レコードを取得
-    $sql = 'SELECT * FROM tasks WHERE status = :status';
-
-    // プリペアドステートメントの準備
-    $stmt = $dbh->prepare($sql);
-
-    // パラメータのバインド
-    $stmt->bindParam(':status', $status, PDO::PARAM_STR);
-
-    // プリペアドステートメントの実行
-    $stmt->execute();
-
-    // 結果の受け取り
-    $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    return $tasks;
+    return htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
 }
 
 // タスク登録時のバリデーション
 function insertValidate($title)
 {
-    // エラーチェック用の配列を初期化
+    // 初期化
     $errors = [];
 
     if ($title == '') {
@@ -70,7 +46,7 @@ function insertTask($title)
     // データベースに接続
     $dbh = connectDb();
 
-    // エラーが 1 つもなければレコードを追加
+    // レコードを追加
     $sql = <<<EOM
     INSERT INTO
         tasks
@@ -87,6 +63,20 @@ function insertTask($title)
     
     // プリペアドステートメントの実行
     $stmt->execute();
+}
+
+// エラーメッセージ作成
+function createErrMsg($errors)
+{
+    $err_msg = "<ul class=\"errors\">\n";
+
+    foreach ($errors as $error) {
+        $err_msg .= "<li>" . h($error) . "</li>\n";
+    }
+
+    $err_msg .= "</ul>\n";
+
+    return $err_msg;
 }
 
 // タスク完了
@@ -115,14 +105,35 @@ function updateStatusToDone($id)
     $stmt->execute();
 }
 
+// status に応じてレコードを取得
+function findTaskByStatus($status)
+{
+    // データベースに接続
+    $dbh = connectDb();
+
+    // status で該当レコードを取得
+    $sql = 'SELECT * FROM tasks WHERE status = :status';
+
+    // プリペアドステートメントの準備
+    $stmt = $dbh->prepare($sql);
+
+    // パラメータのバインド
+    $stmt->bindParam(':status', $status, PDO::PARAM_STR);
+
+    // プリペアドステートメントの実行
+    $stmt->execute();
+
+    // 結果の受け取り
+    $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    return $tasks;
+}
+
 // 受け取った id のレコードを取得
 function findById($id)
 {
     // データベースに接続
     $dbh = connectDb();
-
-    // 初期化
-    $task = [];
 
     // $id を使用してデータを取得
     $sql = 'SELECT * FROM tasks WHERE id = :id';
@@ -146,7 +157,7 @@ function findById($id)
 function updateValidate($title, $task)
 {
     // 初期化
-    $errors = []; // エラーチェック用の配列
+    $errors = [];
 
     if ($title == '') {
         $errors[] = MSG_TITLE_REQUIRED;
@@ -165,7 +176,7 @@ function updateTask($id, $title)
     // データベースに接続
     $dbh = connectDb();
 
-    // エラーが 1 つもなければ $id を使用してデータを更新
+    // $id を使用してデータを更新
     $sql = <<<EOM
     UPDATE
         tasks
@@ -184,20 +195,6 @@ function updateTask($id, $title)
 
     // プリペアドステートメントの実行
     $stmt->execute();
-}
-
-// エラーメッセージ作成
-function createErrMsg($errors)
-{
-    $err_msg .= "<ul class=\"errors\">\n";
-
-    foreach ((array)$errors as $error) {
-        $err_msg .= "<li>" . h($error) . "</li>\n";
-    }
-
-    $err_msg .= "</ul>\n";
-
-    return $err_msg;
 }
 
 // タスク削除
