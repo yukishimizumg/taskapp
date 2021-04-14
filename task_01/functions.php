@@ -1,6 +1,4 @@
 <?php
-
-// 設定ファイルを読み込む
 require_once __DIR__ . '/config.php';
 
 // 接続処理を行う関数
@@ -112,7 +110,14 @@ function findTaskByStatus($status)
     $dbh = connectDb();
 
     // status で該当レコードを取得
-    $sql = 'SELECT * FROM tasks WHERE status = :status';
+    $sql = <<<EOM
+    SELECT
+        * 
+    FROM 
+        tasks
+    WHERE 
+        status = :status;
+    EOM;
 
     // プリペアドステートメントの準備
     $stmt = $dbh->prepare($sql);
@@ -123,10 +128,8 @@ function findTaskByStatus($status)
     // プリペアドステートメントの実行
     $stmt->execute();
 
-    // 結果の受け取り
-    $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    return $tasks;
+    // 結果の取得
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 // 受け取った id のレコードを取得
@@ -136,7 +139,14 @@ function findById($id)
     $dbh = connectDb();
 
     // $id を使用してデータを取得
-    $sql = 'SELECT * FROM tasks WHERE id = :id';
+    $sql = <<<EOM
+    SELECT
+        * 
+    FROM 
+        tasks
+    WHERE 
+        id = :id;
+    EOM;
 
     // プリペアドステートメントの準備
     $stmt = $dbh->prepare($sql);
@@ -148,9 +158,7 @@ function findById($id)
     $stmt->execute();
 
     // 結果の取得
-    $task = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    return $task;
+    return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
 // タスク更新時のバリデーション

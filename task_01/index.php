@@ -1,9 +1,5 @@
 <?php
-
-// 関数ファイルを読み込む
 require_once __DIR__ . '/functions.php';
-
-// 定数を参照するため設定ファイルを読み込む
 require_once __DIR__ . '/config.php';
 
 /* タスク登録
